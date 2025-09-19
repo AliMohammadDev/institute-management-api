@@ -1,0 +1,63 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  id: String!
+  user_name: String!
+  password: String!
+  full_name: String
+}
+
+type PaginationMetadata {
+  total: Int
+  current_page: Int
+  items_per_page: Int
+  total_pages: Int
+}
+
+type UserPaginationResultOutput {
+  items: [User!]!
+  meta: PaginationMetadata!
+}
+
+type Query {
+  users(filter: FindAllUserInput!): UserPaginationResultOutput!
+  user(id: String!): User!
+}
+
+input FindAllUserInput {
+  full_name: MatchInput
+  password: MatchInput
+  user_name: MatchInput
+  pagination: PaginationInput!
+}
+
+input MatchInput {
+  value: String!
+  op: String!
+}
+
+input PaginationInput {
+  limit: Int!
+  page: Int!
+}
+
+type Mutation {
+  createUser(createUserInput: CreateUserInput!): User!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+  removeUser(id: Int!): User!
+}
+
+input CreateUserInput {
+  user_name: String!
+  password: String!
+  full_name: String
+}
+
+input UpdateUserInput {
+  user_name: String
+  password: String
+  full_name: String
+  id: String!
+}
