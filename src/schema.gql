@@ -3,17 +3,16 @@
 # ------------------------------------------------------
 
 type User {
-  id: String!
-  user_name: String!
-  password: String!
-  full_name: String
+  id: Int!
+  fullName: String
+  email: String!
 }
 
 type PaginationMetadata {
   total: Int
-  current_page: Int
-  items_per_page: Int
-  total_pages: Int
+  currentPage: Int
+  itemsPerPage: Int
+  totalPages: Int
 }
 
 type UserPaginationResultOutput {
@@ -23,13 +22,13 @@ type UserPaginationResultOutput {
 
 type Query {
   users(filter: FindAllUserInput!): UserPaginationResultOutput!
-  user(id: String!): User!
+  user(id: Float!): User!
 }
 
 input FindAllUserInput {
-  full_name: MatchInput
+  fullName: MatchInput
   password: MatchInput
-  user_name: MatchInput
+  email: MatchInput
   pagination: PaginationInput!
 }
 
@@ -50,14 +49,14 @@ type Mutation {
 }
 
 input CreateUserInput {
-  user_name: String!
+  fullName: String
+  email: String!
   password: String!
-  full_name: String
 }
 
 input UpdateUserInput {
-  user_name: String
+  fullName: String
+  email: String
   password: String
-  full_name: String
-  id: String!
+  id: Float!
 }
