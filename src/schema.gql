@@ -3,6 +3,8 @@
 # ------------------------------------------------------
 
 type User {
+  createdAt: String!
+  updatedAt: String!
   id: Int!
   fullName: String
   email: String!
@@ -20,9 +22,19 @@ type UserPaginationResultOutput {
   meta: PaginationMetadata!
 }
 
+type ClassLevel {
+  createdAt: String!
+  updatedAt: String!
+  id: Int!
+  name: String
+  code: String!
+}
+
 type Query {
   users(filter: FindAllUserInput!): UserPaginationResultOutput!
   user(id: Float!): User!
+  classLevels: [ClassLevel!]!
+  classLevel(classLevelId: Float!): ClassLevel!
 }
 
 input FindAllUserInput {
@@ -46,6 +58,9 @@ type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: Int!): User!
+  createClassLevel(createClassLevelInput: CreateClassLevelInput!): ClassLevel!
+  updateClassLevel(updateClassLevelInput: UpdateClassLevelInput!): ClassLevel!
+  removeClassLevel(classLevelId: Int!): ClassLevel!
 }
 
 input CreateUserInput {
@@ -59,4 +74,15 @@ input UpdateUserInput {
   email: String
   password: String
   id: Float!
+}
+
+input CreateClassLevelInput {
+  name: String
+  code: String!
+}
+
+input UpdateClassLevelInput {
+  name: String
+  code: String
+  id: Int!
 }

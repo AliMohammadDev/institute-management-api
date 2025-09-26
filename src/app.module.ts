@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-
 import { ConfigModule } from '@nestjs/config';
 import { join } from 'path';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -10,6 +9,7 @@ import { UserModule } from './user/user.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { ClassLevelModule } from './class-level/class-level.module';
 
 @Module({
   imports: [
@@ -51,6 +51,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
       plugins: process.env.NODE_ENV !== 'production' ? [ApolloServerPluginLandingPageLocalDefault()] : [],
     }),
     UserModule,
+    ClassLevelModule,
   ],
   controllers: [AppController],
   providers: [AppService],
