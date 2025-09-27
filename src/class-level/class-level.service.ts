@@ -4,6 +4,10 @@ import { UpdateClassLevelInput } from './dto/update-class-level.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ClassLevel } from './entities/class-level.entity';
 import { FindOptionsRelations, FindOptionsSelect, FindOptionsWhere, Repository } from 'typeorm';
+import { FindAllUserInput } from 'src/user/dto/find-all-user.input';
+import { generateQueryConditions, generateQuerySorts, metaTransformer } from 'src/shared/helpers';
+import { PaginationMetadata } from 'src/shared/types/pagination-metadata';
+import { paginate } from 'nestjs-typeorm-paginate';
 
 @Injectable()
 export class ClassLevelService {
@@ -16,9 +20,20 @@ export class ClassLevelService {
     return await this.classLevelRepository.save(newClassLevel);
   }
 
-  async findAll(): Promise<ClassLevel[]> {
-    return await this.classLevelRepository.find();
+  async findAll(filter: FindAllUserInput) {
+    const query = this.classLevelRepository.createQueryBuilder('classLevel').where('true');
+
+    generateQuerySorts<ClassLevel>(query, filter, ClassLevel, 'classLevel');
+
+    generateQueryConditions<ClassLevel>(query, filter, 'classLevel');
+
+    return paginate<ClassLevel, PaginationMetadata>(query, {
+      limit: filter.pagination.limit,
+      page: filter.pagination.page,
+      metaTransformer,
+    });
   }
+
   async findOne(
     classLevelOptions: FindOptionsWhere<ClassLevel>,
     options?: {

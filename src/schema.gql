@@ -30,11 +30,16 @@ type ClassLevel {
   code: String!
 }
 
+type ClassLevelPaginationResultOutput {
+  items: [ClassLevel!]!
+  meta: PaginationMetadata!
+}
+
 type Query {
   users(filter: FindAllUserInput!): UserPaginationResultOutput!
   user(id: Float!): User!
-  classLevels: [ClassLevel!]!
-  classLevel(classLevelId: Float!): ClassLevel!
+  classLevels(filter: findAllClassLevelInput!): ClassLevelPaginationResultOutput!
+  classLevel(classLevelId: Int!): ClassLevel!
 }
 
 input FindAllUserInput {
@@ -52,6 +57,12 @@ input MatchInput {
 input PaginationInput {
   limit: Int!
   page: Int!
+}
+
+input findAllClassLevelInput {
+  name: MatchInput
+  code: MatchInput
+  pagination: PaginationInput!
 }
 
 type Mutation {

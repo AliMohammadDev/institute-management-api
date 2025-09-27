@@ -4,6 +4,8 @@ import { ClassLevel } from './entities/class-level.entity';
 import { CreateClassLevelInput } from './dto/create-class-level.input';
 import { UpdateClassLevelInput } from './dto/update-class-level.input';
 import { NotFoundException } from '@nestjs/common';
+import { ClassLevelPaginationResultOutput } from './dto/find-all-class-level.output';
+import { findAllClassLevelInput } from './dto/find-all-class-level.input';
 
 @Resolver(() => ClassLevel)
 export class ClassLevelResolver {
@@ -14,14 +16,20 @@ export class ClassLevelResolver {
     return await this.classLevelService.create(createClassLevelInput);
   }
 
-  @Query(() => [ClassLevel], { name: 'classLevels' })
-  async findAll() {
-    return await this.classLevelService.findAll();
+  @Query(() => ClassLevelPaginationResultOutput, { name: 'classLevels' })
+  public findAll(@Args('filter') filter: findAllClassLevelInput) {
+    return this.classLevelService.findAll(filter);
   }
 
   @Query(() => ClassLevel, { name: 'classLevel' })
-  async findOne(@Args('classLevelId') classLevelId: number) {
-    return await this.classLevelService.findOne({ id: classLevelId });
+  async findOne(@Args('classLevelId', { type: () => Int }) classLevelId: number) {
+    const classLevel = await this.classLevelService.findOne({ id: classLevelId });
+
+    if (!classLevel) {
+      throw new NotFoundException(`ClassLevel #${classLevelId} not found`);
+    }
+
+    return classLevel;
   }
 
   @Mutation(() => ClassLevel)
