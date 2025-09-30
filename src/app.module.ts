@@ -10,6 +10,8 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ClassLevelModule } from './class-level/class-level.module';
+import { StudentModule } from './student/student.module';
+import { GroupModule } from './group/group.module';
 
 @Module({
   imports: [
@@ -52,6 +54,8 @@ import { ClassLevelModule } from './class-level/class-level.module';
     }),
     UserModule,
     ClassLevelModule,
+    StudentModule,
+    GroupModule,
   ],
   controllers: [AppController],
   providers: [AppService],

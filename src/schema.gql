@@ -35,11 +35,34 @@ type ClassLevelPaginationResultOutput {
   meta: PaginationMetadata!
 }
 
+type Student {
+  id: Int!
+  firstName: String!
+  lastName: String!
+  dateOfBirth: DateTime
+  gender: String
+  email: String!
+  phone: String
+  address: String
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Group {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
 type Query {
   users(filter: FindAllUserInput!): UserPaginationResultOutput!
   user(id: Float!): User!
   classLevels(filter: findAllClassLevelInput!): ClassLevelPaginationResultOutput!
   classLevel(classLevelId: Int!): ClassLevel!
+  student(id: Int!): Student!
+  group(id: Int!): Group!
 }
 
 input FindAllUserInput {
@@ -72,6 +95,12 @@ type Mutation {
   createClassLevel(createClassLevelInput: CreateClassLevelInput!): ClassLevel!
   updateClassLevel(updateClassLevelInput: UpdateClassLevelInput!): ClassLevel!
   removeClassLevel(classLevelId: Int!): ClassLevel!
+  createStudent(createStudentInput: CreateStudentInput!): Student!
+  updateStudent(updateStudentInput: UpdateStudentInput!): Student!
+  removeStudent(id: Int!): Student!
+  createGroup(createGroupInput: CreateGroupInput!): Group!
+  updateGroup(updateGroupInput: UpdateGroupInput!): Group!
+  removeGroup(id: Int!): Group!
 }
 
 input CreateUserInput {
@@ -95,5 +124,37 @@ input CreateClassLevelInput {
 input UpdateClassLevelInput {
   name: String
   code: String
+  id: Int!
+}
+
+input CreateStudentInput {
+  firstName: String!
+  lastName: String!
+  dateOfBirth: String
+  gender: String
+  email: String!
+  phone: String
+  address: String
+}
+
+input UpdateStudentInput {
+  firstName: String
+  lastName: String
+  dateOfBirth: String
+  gender: String
+  email: String
+  phone: String
+  address: String
+  id: Int!
+}
+
+input CreateGroupInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateGroupInput {
+  """Example field (placeholder)"""
+  exampleField: Int
   id: Int!
 }

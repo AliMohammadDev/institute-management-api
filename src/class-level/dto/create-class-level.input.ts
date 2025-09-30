@@ -5,10 +5,6 @@ import { IsOptional, IsString } from 'class-validator';
 export class CreateClassLevelInput {
   @IsOptional()
   @IsString()
-  @Field({ nullable: true })
-  name: string;
-
-  @IsString()
   @Field()
-  code: string;
+  name: string;
 }
