@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
-
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOptionsRelations, FindOptionsSelect, FindOptionsWhere, Repository } from 'typeorm';
-
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { User } from './entities/user.entity';
@@ -56,7 +54,9 @@ export class UserService {
     return this.findOne({ id: updateUserInput.id });
   }
 
-  public remove(id: number) {
-    return `This action removes a #${id} user`;
+  public async remove(id: number) {
+    const user = await this.userRepository.findOne({ where: { id } });
+    await this.userRepository.delete(id);
+    return user;
   }
 }

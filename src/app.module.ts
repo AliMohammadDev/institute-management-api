@@ -3,15 +3,19 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { join } from 'path';
 import { TypeOrmModule } from '@nestjs/typeorm';
-
+import { GraphQLError } from 'graphql';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+<<<<<<< HEAD
 import { GraphQLError } from 'graphql';
 import { DdModule } from './dd/dd.module';
+=======
+
+>>>>>>> e606b595f1cb1ffa22a536d6c9c6d03ab35b9f91
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -41,7 +45,6 @@ import { DdModule } from './dd/dd.module';
       cache: 'bounded',
       formatError: (error: GraphQLError) => {
         if (process.env.NODE_ENV === 'production') return { message: error.message };
-
         // return error;
         return {
           message: error.message,

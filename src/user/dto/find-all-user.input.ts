@@ -1,6 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { IsNotEmpty, IsObject, IsOptional } from 'class-validator';
-
 import { Type } from 'class-transformer';
 import { MatchInput, PaginationInput } from 'src/shared/types/graphql-input-types';
 
@@ -10,7 +9,7 @@ export class FindAllUserInput {
   @IsObject()
   @Type(() => MatchInput)
   @Field(() => MatchInput, { nullable: true })
-  full_name?: MatchInput;
+  fullName?: MatchInput;
 
   @IsOptional()
   @IsObject()
@@ -22,7 +21,7 @@ export class FindAllUserInput {
   @IsObject()
   @Type(() => MatchInput)
   @Field(() => MatchInput, { nullable: true })
-  user_name?: MatchInput;
+  email?: MatchInput;
 
   @IsNotEmpty()
   @IsObject()

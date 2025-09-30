@@ -2,22 +2,26 @@ import { Field, Int, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class PaginationMetadata {
+<<<<<<< HEAD
   constructor(total: number, current_page: number, items_per_page: number, total_pages: number) {
+=======
+  constructor(total: number, currentPage: number, itemsPerPage: number, totalPages: number) {
+>>>>>>> e606b595f1cb1ffa22a536d6c9c6d03ab35b9f91
     this.total = total;
-    this.current_page = current_page;
-    this.items_per_page = items_per_page;
-    this.total_pages = total_pages;
+    this.currentPage = currentPage;
+    this.itemsPerPage = itemsPerPage;
+    this.totalPages = totalPages;
   }
 
   @Field(() => Int, { nullable: true })
   total?: number;
 
   @Field(() => Int, { nullable: true })
-  current_page?: number;
+  currentPage?: number;
 
   @Field(() => Int, { nullable: true })
-  items_per_page?: number;
+  itemsPerPage?: number;
 
   @Field(() => Int, { nullable: true })
-  total_pages?: number;
+  totalPages?: number;
 }

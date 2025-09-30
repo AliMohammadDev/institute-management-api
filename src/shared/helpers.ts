@@ -1,8 +1,5 @@
 import { getMetadataArgsStorage } from 'typeorm';
 import { IPaginationMeta } from 'nestjs-typeorm-paginate';
-import { HttpException, HttpStatus } from '@nestjs/common';
-import * as path from 'path';
-import { diskStorage } from 'multer';
 import {
   InInputSchema,
   ListOfIdsInputSchema,
@@ -35,11 +32,7 @@ export function generateQuerySorts<T>(
   entity: Function,
   entityName: string,
 ) {
-  if (
-    filter.sort &&
-    isValidColumn(entity, filter.sort.by.split('.')[0]) &&
-    ['ASC', 'DESC'].includes(filter.sort.type)
-  ) {
+  if (isValidColumn(entity, filter.sort.by.split('.')[0]) && ['ASC', 'DESC'].includes(filter.sort.type)) {
     if (filter.sort.by.split('.')[0] === 'counts' && filter.sort.by.split('.')[1])
       query.orderBy(
         `JSON_EXTRACT(${entityName}.counts, '$.${filter.sort.by.split('.')[1]}')`,

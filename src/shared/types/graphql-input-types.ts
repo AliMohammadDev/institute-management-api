@@ -1,16 +1,6 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
 import { Type } from 'class-transformer';
-import {
-  IsArray,
-  IsBoolean,
-  IsInt,
-  IsNotEmpty,
-  IsNumberString,
-  IsObject,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from 'class-validator';
+import { IsArray, IsInt, IsNotEmpty, IsNumberString, IsString, ValidateNested } from 'class-validator';
 
 @InputType()
 export class MatchInput {
