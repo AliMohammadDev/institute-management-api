@@ -22,19 +22,6 @@ type UserPaginationResultOutput {
   meta: PaginationMetadata!
 }
 
-type ClassLevel {
-  createdAt: String!
-  updatedAt: String!
-  id: Int!
-  name: String
-  code: String!
-}
-
-type ClassLevelPaginationResultOutput {
-  items: [ClassLevel!]!
-  meta: PaginationMetadata!
-}
-
 type Student {
   id: Int!
   firstName: String!
@@ -44,6 +31,7 @@ type Student {
   email: String!
   phone: String
   address: String
+  group: Group
 }
 
 """
@@ -52,8 +40,28 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 scalar DateTime
 
 type Group {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  id: Int!
+  name: String!
+  classLevel: ClassLevel!
+  students: [Student!]
+}
+
+type ClassLevel {
+  createdAt: String!
+  updatedAt: String!
+  id: Int!
+  name: String!
+  groups: [Group!]
+}
+
+type ClassLevelPaginationResultOutput {
+  items: [ClassLevel!]!
+  meta: PaginationMetadata!
+}
+
+type GroupPaginationResultOutput {
+  items: [Group!]!
+  meta: PaginationMetadata!
 }
 
 type Query {
@@ -62,7 +70,8 @@ type Query {
   classLevels(filter: findAllClassLevelInput!): ClassLevelPaginationResultOutput!
   classLevel(classLevelId: Int!): ClassLevel!
   student(id: Int!): Student!
-  group(id: Int!): Group!
+  groups(filter: FindAllGroupInput!): GroupPaginationResultOutput!
+  group(groupId: Int!): Group!
 }
 
 input FindAllUserInput {
@@ -84,8 +93,19 @@ input PaginationInput {
 
 input findAllClassLevelInput {
   name: MatchInput
-  code: MatchInput
   pagination: PaginationInput!
+  sort: SortInput
+}
+
+input SortInput {
+  by: String!
+  type: String!
+}
+
+input FindAllGroupInput {
+  name: MatchInput
+  pagination: PaginationInput!
+  sort: SortInput
 }
 
 type Mutation {
@@ -100,7 +120,7 @@ type Mutation {
   removeStudent(id: Int!): Student!
   createGroup(createGroupInput: CreateGroupInput!): Group!
   updateGroup(updateGroupInput: UpdateGroupInput!): Group!
-  removeGroup(id: Int!): Group!
+  removeGroup(groupId: Int!): Group!
 }
 
 input CreateUserInput {
@@ -117,13 +137,11 @@ input UpdateUserInput {
 }
 
 input CreateClassLevelInput {
-  name: String
-  code: String!
+  name: String!
 }
 
 input UpdateClassLevelInput {
   name: String
-  code: String
   id: Int!
 }
 
@@ -135,6 +153,7 @@ input CreateStudentInput {
   email: String!
   phone: String
   address: String
+  groupId: Int
 }
 
 input UpdateStudentInput {
@@ -145,16 +164,17 @@ input UpdateStudentInput {
   email: String
   phone: String
   address: String
+  groupId: Int
   id: Int!
 }
 
 input CreateGroupInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  name: String!
+  classLevelId: Int!
 }
 
 input UpdateGroupInput {
-  """Example field (placeholder)"""
-  exampleField: Int
+  name: String
+  classLevelId: Int
   id: Int!
 }

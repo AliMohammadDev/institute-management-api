@@ -12,8 +12,8 @@ export class ClassLevelResolver {
   constructor(private readonly classLevelService: ClassLevelService) {}
 
   @Mutation(() => ClassLevel)
-  async createClassLevel(@Args('createClassLevelInput') createClassLevelInput: CreateClassLevelInput) {
-    return await this.classLevelService.create(createClassLevelInput);
+  createClassLevel(@Args('createClassLevelInput') createClassLevelInput: CreateClassLevelInput) {
+    return this.classLevelService.create(createClassLevelInput);
   }
 
   @Query(() => ClassLevelPaginationResultOutput, { name: 'classLevels' })
@@ -22,9 +22,8 @@ export class ClassLevelResolver {
   }
 
   @Query(() => ClassLevel, { name: 'classLevel' })
-  async findOne(@Args('classLevelId', { type: () => Int }) classLevelId: number) {
-    const classLevel = await this.classLevelService.findOne({ id: classLevelId });
-
+  findOne(@Args('classLevelId', { type: () => Int }) classLevelId: number) {
+    const classLevel = this.classLevelService.findOne({ id: classLevelId }, { relations: { groups: true } });
     if (!classLevel) {
       throw new NotFoundException(`ClassLevel #${classLevelId} not found`);
     }
@@ -33,8 +32,8 @@ export class ClassLevelResolver {
   }
 
   @Mutation(() => ClassLevel)
-  async updateClassLevel(@Args('updateClassLevelInput') updateClassLevelInput: UpdateClassLevelInput) {
-    const classLevel = await this.classLevelService.update(updateClassLevelInput);
+  updateClassLevel(@Args('updateClassLevelInput') updateClassLevelInput: UpdateClassLevelInput) {
+    const classLevel = this.classLevelService.update(updateClassLevelInput);
     if (!classLevel) {
       throw new NotFoundException(`ClassLevel #${updateClassLevelInput.id} not found`);
     }
@@ -42,8 +41,8 @@ export class ClassLevelResolver {
   }
 
   @Mutation(() => ClassLevel)
-  async removeClassLevel(@Args('classLevelId', { type: () => Int }) classLevelId: number) {
-    const classLevel = await this.classLevelService.remove(classLevelId);
+  removeClassLevel(@Args('classLevelId', { type: () => Int }) classLevelId: number) {
+    const classLevel = this.classLevelService.remove(classLevelId);
     if (!classLevel) {
       throw new NotFoundException(`ClassLevel #${classLevelId} not found`);
     }

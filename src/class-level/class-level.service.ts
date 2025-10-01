@@ -8,6 +8,7 @@ import { FindAllUserInput } from 'src/user/dto/find-all-user.input';
 import { generateQueryConditions, generateQuerySorts, metaTransformer } from 'src/shared/helpers';
 import { PaginationMetadata } from 'src/shared/types/pagination-metadata';
 import { paginate } from 'nestjs-typeorm-paginate';
+import { findAllClassLevelInput } from './dto/find-all-class-level.input';
 
 @Injectable()
 export class ClassLevelService {
@@ -20,8 +21,11 @@ export class ClassLevelService {
     return await this.classLevelRepository.save(newClassLevel);
   }
 
-  async findAll(filter: FindAllUserInput) {
-    const query = this.classLevelRepository.createQueryBuilder('classLevel').where('true');
+  async findAll(filter: findAllClassLevelInput) {
+    const query = this.classLevelRepository
+      .createQueryBuilder('classLevel')
+      .leftJoinAndSelect('classLevel.groups', 'group')
+      .where('true');
 
     generateQuerySorts<ClassLevel>(query, filter, ClassLevel, 'classLevel');
 
@@ -50,13 +54,14 @@ export class ClassLevelService {
   }
 
   async update(updateClassLevelInput: UpdateClassLevelInput): Promise<ClassLevel | null> {
-    const classLevel = await this.classLevelRepository.update({ id: updateClassLevelInput.id }, updateClassLevelInput);
+    const classLevel = await this.findOne({ id: updateClassLevelInput.id });
     if (!classLevel) return null;
-    return this.findOne({ id: updateClassLevelInput.id });
+    Object.assign(classLevel, updateClassLevelInput);
+    return await this.classLevelRepository.save(classLevel);
   }
 
   async remove(classLevelId: number): Promise<ClassLevel | null> {
-    const classLevel = await this.findOne({ id: classLevelId });
+    const classLevel = await this.findOne({ id: classLevelId }, { relations: { groups: true } });
     if (!classLevel) return null;
     await this.classLevelRepository.delete(classLevelId);
     return classLevel;

@@ -32,7 +32,12 @@ export function generateQuerySorts<T>(
   entity: Function,
   entityName: string,
 ) {
-  if (isValidColumn(entity, filter.sort.by.split('.')[0]) && ['ASC', 'DESC'].includes(filter.sort.type)) {
+  if (
+    filter.sort &&
+    filter.sort.by &&
+    isValidColumn(entity, filter.sort.by.split('.')[0]) &&
+    ['ASC', 'DESC'].includes(filter.sort.type)
+  ) {
     if (filter.sort.by.split('.')[0] === 'counts' && filter.sort.by.split('.')[1])
       query.orderBy(
         `JSON_EXTRACT(${entityName}.counts, '$.${filter.sort.by.split('.')[1]}')`,

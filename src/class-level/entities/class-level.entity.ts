@@ -10,8 +10,8 @@ export class ClassLevel extends BaseEntity {
   @Field(() => Int)
   id: number;
 
-  @Column('varchar', { length: 100 })
-  @Field({ nullable: true })
+  @Column('varchar', { length: 100, unique: true })
+  @Field()
   name: string;
 
   @OneToMany(() => Group, (group) => group.classLevel)

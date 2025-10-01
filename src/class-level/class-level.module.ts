@@ -7,5 +7,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 @Module({
   imports: [TypeOrmModule.forFeature([ClassLevel])],
   providers: [ClassLevelResolver, ClassLevelService],
+  exports: [ClassLevelService],
 })
 export class ClassLevelModule {}
