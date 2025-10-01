@@ -25,6 +25,7 @@ export class ClassLevelService {
     const query = this.classLevelRepository
       .createQueryBuilder('classLevel')
       .leftJoinAndSelect('classLevel.groups', 'group')
+      .leftJoinAndSelect('group.students', 'student')
       .where('true');
 
     generateQuerySorts<ClassLevel>(query, filter, ClassLevel, 'classLevel');

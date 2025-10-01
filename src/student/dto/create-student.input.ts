@@ -1,4 +1,5 @@
 import { InputType, Field, Int } from '@nestjs/graphql';
+import { Type } from 'class-transformer';
 import { IsDateString, IsString, IsEmail, IsOptional, IsInt } from 'class-validator';
 
 @InputType()
@@ -11,9 +12,10 @@ export class CreateStudentInput {
   @IsString()
   lastName: string;
 
-  @Field({ nullable: true })
+  @Field()
   @IsDateString()
-  dateOfBirth?: string;
+  @Type(() => Date)
+  dateOfBirth: Date;
 
   @Field({ nullable: true })
   @IsString()

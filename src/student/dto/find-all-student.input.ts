@@ -1,6 +1,6 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { Type } from 'class-transformer';
-import { IsNotEmpty, IsObject, IsOptional } from 'class-validator';
+import { IsDateString, IsNotEmpty, IsObject, IsOptional } from 'class-validator';
 import { MatchInput, PaginationInput } from 'src/shared/types/graphql-input-types';
 
 @InputType()

@@ -9,5 +9,6 @@ import { ClassLevelModule } from 'src/class-level/class-level.module';
 @Module({
   imports: [TypeOrmModule.forFeature([Group]), ClassLevelModule],
   providers: [GroupResolver, GroupService],
+  exports: [GroupService],
 })
 export class GroupModule {}

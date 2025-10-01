@@ -26,7 +26,7 @@ type Student {
   id: Int!
   firstName: String!
   lastName: String!
-  dateOfBirth: DateTime
+  dateOfBirth: DateTime!
   gender: String
   email: String!
   phone: String
@@ -42,8 +42,8 @@ scalar DateTime
 type Group {
   id: Int!
   name: String!
-  classLevel: ClassLevel!
-  students: [Student!]
+  classLevel: ClassLevel
+  students: [Student]
 }
 
 type ClassLevel {
@@ -51,11 +51,16 @@ type ClassLevel {
   updatedAt: String!
   id: Int!
   name: String!
-  groups: [Group!]
+  groups: [Group]
 }
 
 type ClassLevelPaginationResultOutput {
   items: [ClassLevel!]!
+  meta: PaginationMetadata!
+}
+
+type StudentPaginationResultOutput {
+  items: [Student!]!
   meta: PaginationMetadata!
 }
 
@@ -69,7 +74,8 @@ type Query {
   user(id: Float!): User!
   classLevels(filter: findAllClassLevelInput!): ClassLevelPaginationResultOutput!
   classLevel(classLevelId: Int!): ClassLevel!
-  student(id: Int!): Student!
+  students(filter: FindAllStudentInput!): StudentPaginationResultOutput!
+  student(studentId: Int!): Student!
   groups(filter: FindAllGroupInput!): GroupPaginationResultOutput!
   group(groupId: Int!): Group!
 }
@@ -102,6 +108,18 @@ input SortInput {
   type: String!
 }
 
+input FindAllStudentInput {
+  name: MatchInput
+  firstName: MatchInput
+  lastName: MatchInput
+  dateOfBirth: MatchInput
+  gender: MatchInput
+  email: MatchInput
+  phone: MatchInput
+  address: MatchInput
+  pagination: PaginationInput!
+}
+
 input FindAllGroupInput {
   name: MatchInput
   pagination: PaginationInput!
@@ -117,7 +135,7 @@ type Mutation {
   removeClassLevel(classLevelId: Int!): ClassLevel!
   createStudent(createStudentInput: CreateStudentInput!): Student!
   updateStudent(updateStudentInput: UpdateStudentInput!): Student!
-  removeStudent(id: Int!): Student!
+  removeStudent(studentId: Int!): Student!
   createGroup(createGroupInput: CreateGroupInput!): Group!
   updateGroup(updateGroupInput: UpdateGroupInput!): Group!
   removeGroup(groupId: Int!): Group!
@@ -148,7 +166,7 @@ input UpdateClassLevelInput {
 input CreateStudentInput {
   firstName: String!
   lastName: String!
-  dateOfBirth: String
+  dateOfBirth: DateTime!
   gender: String
   email: String!
   phone: String
@@ -159,7 +177,7 @@ input CreateStudentInput {
 input UpdateStudentInput {
   firstName: String
   lastName: String
-  dateOfBirth: String
+  dateOfBirth: DateTime
   gender: String
   email: String
   phone: String

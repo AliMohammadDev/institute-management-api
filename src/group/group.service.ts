@@ -28,7 +28,10 @@ export class GroupService {
   }
 
   async findAll(filter: FindAllGroupInput) {
-    const query = this.groupRepository.createQueryBuilder('group').where('true');
+    const query = this.groupRepository
+      .createQueryBuilder('group')
+      .leftJoinAndSelect('group.classLevel', 'classLevel')
+      .where('true');
 
     generateQuerySorts<Group>(query, filter, Group, 'group');
 

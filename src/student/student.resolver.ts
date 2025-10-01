@@ -3,6 +3,9 @@ import { StudentService } from './student.service';
 import { Student } from './entities/student.entity';
 import { CreateStudentInput } from './dto/create-student.input';
 import { UpdateStudentInput } from './dto/update-student.input';
+import { FindAllStudentInput } from './dto/find-all-student.input';
+import { NotFoundException } from '@nestjs/common';
+import { StudentPaginationResultOutput } from './dto/find-all-student.output';
 
 @Resolver(() => Student)
 export class StudentResolver {
@@ -13,23 +16,27 @@ export class StudentResolver {
     return this.studentService.create(createStudentInput);
   }
 
-  @Query(() => [Student], { name: 'student' })
-  findAll() {
-    return this.studentService.findAll();
+  @Query(() => StudentPaginationResultOutput, { name: 'students' })
+  findAll(@Args('filter') filter: FindAllStudentInput) {
+    return this.studentService.findAll(filter);
   }
 
   @Query(() => Student, { name: 'student' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.studentService.findOne(id);
+  async findOne(@Args('studentId', { type: () => Int }) studentId: number) {
+    const group = await this.studentService.findOne({ id: studentId }, { relations: { group: { classLevel: true } } });
+    if (!group) {
+      throw new NotFoundException(`ClassLevel #${studentId} not found`);
+    }
+    return group;
   }
 
   @Mutation(() => Student)
   updateStudent(@Args('updateStudentInput') updateStudentInput: UpdateStudentInput) {
-    return this.studentService.update(updateStudentInput.id, updateStudentInput);
+    return this.studentService.update(updateStudentInput);
   }
 
   @Mutation(() => Student)
-  removeStudent(@Args('id', { type: () => Int }) id: number) {
-    return this.studentService.remove(id);
+  removeStudent(@Args('studentId', { type: () => Int }) studentId: number) {
+    return this.studentService.remove(studentId);
   }
 }

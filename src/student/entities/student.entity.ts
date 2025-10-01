@@ -17,9 +17,15 @@ export class Student extends BaseEntity {
   @Field()
   lastName: string;
 
-  @Column({ type: 'date', nullable: true })
-  @Field({ nullable: true })
-  dateOfBirth?: Date;
+  @Column({
+    type: 'date',
+    transformer: {
+      to: (value: Date) => value,
+      from: (value: string) => (value ? new Date(value) : null),
+    },
+  })
+  @Field(() => Date)
+  dateOfBirth: Date;
 
   @Column('varchar', { length: 50, nullable: true })
   @Field({ nullable: true })

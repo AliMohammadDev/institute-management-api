@@ -3,9 +3,10 @@ import { StudentService } from './student.service';
 import { StudentResolver } from './student.resolver';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Student } from './entities/student.entity';
+import { GroupModule } from 'src/group/group.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Student])],
+  imports: [TypeOrmModule.forFeature([Student]), GroupModule],
   providers: [StudentResolver, StudentService],
 })
 export class StudentModule {}

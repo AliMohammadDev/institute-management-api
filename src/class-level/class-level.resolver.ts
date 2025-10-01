@@ -23,7 +23,10 @@ export class ClassLevelResolver {
 
   @Query(() => ClassLevel, { name: 'classLevel' })
   findOne(@Args('classLevelId', { type: () => Int }) classLevelId: number) {
-    const classLevel = this.classLevelService.findOne({ id: classLevelId }, { relations: { groups: true } });
+    const classLevel = this.classLevelService.findOne(
+      { id: classLevelId },
+      { relations: { groups: { students: true } } },
+    );
     if (!classLevel) {
       throw new NotFoundException(`ClassLevel #${classLevelId} not found`);
     }
