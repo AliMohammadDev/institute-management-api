@@ -1,14 +1,11 @@
 import { InputType, Int, Field } from '@nestjs/graphql';
-import { IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, isNotEmpty, IsOptional, IsString } from 'class-validator';
 
 @InputType()
 export class CreateClassLevelInput {
   @IsOptional()
   @IsString()
-  @Field({ nullable: true })
-  name: string;
-
-  @IsString()
+  @IsNotEmpty()
   @Field()
-  code: string;
+  name: string;
 }

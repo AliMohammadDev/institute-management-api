@@ -9,8 +9,7 @@ import { UserModule } from './user/user.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { TeacherModule } from './teacher/teacher.module';
-import { StudyMaterialModule } from './study-material/study-material.module';
+import { ClassLevelModule } from './class-level/class-level.module';
 
 @Module({
   imports: [
@@ -52,9 +51,8 @@ import { StudyMaterialModule } from './study-material/study-material.module';
       plugins: process.env.NODE_ENV !== 'production' ? [ApolloServerPluginLandingPageLocalDefault()] : [],
     }),
     UserModule,
-    TeacherModule,
-        StudyMaterialModule
-    ],
+    ClassLevelModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

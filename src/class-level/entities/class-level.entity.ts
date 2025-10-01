@@ -1,6 +1,7 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { Group } from 'src/group/entities/group.entity';
 import { BaseEntity } from 'src/shared/base.entity';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -9,11 +10,11 @@ export class ClassLevel extends BaseEntity {
   @Field(() => Int)
   id: number;
 
-  @Column('varchar', { length: 255, nullable: true })
-  @Field({ nullable: true })
+  @Column('varchar', { length: 100, unique: true })
+  @Field()
   name: string;
 
-  @Column('varchar', { length: 255 })
-  @Field()
-  code: string;
+  @OneToMany(() => Group, (group) => group.classLevel)
+  @Field(() => [Group], { nullable: 'itemsAndList' })
+  groups?: Group[];
 }

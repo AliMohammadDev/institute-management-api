@@ -4,7 +4,7 @@ import { IsNotEmpty, IsObject, IsOptional } from 'class-validator';
 import { MatchInput, PaginationInput, SortInput } from 'src/shared/types/graphql-input-types';
 
 @InputType()
-export class findAllClassLevelInput {
+export class FindAllGroupInput {
   @IsOptional()
   @IsObject()
   @Type(() => MatchInput)

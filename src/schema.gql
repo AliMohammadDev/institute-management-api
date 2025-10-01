@@ -22,16 +22,50 @@ type UserPaginationResultOutput {
   meta: PaginationMetadata!
 }
 
+type Student {
+  id: Int!
+  firstName: String!
+  lastName: String!
+  dateOfBirth: DateTime!
+  gender: String
+  email: String!
+  phone: String
+  address: String
+  group: Group
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Group {
+  id: Int!
+  name: String!
+  classLevel: ClassLevel
+  students: [Student]
+}
+
 type ClassLevel {
   createdAt: String!
   updatedAt: String!
   id: Int!
-  name: String
-  code: String!
+  name: String!
+  groups: [Group]
 }
 
 type ClassLevelPaginationResultOutput {
   items: [ClassLevel!]!
+  meta: PaginationMetadata!
+}
+
+type StudentPaginationResultOutput {
+  items: [Student!]!
+  meta: PaginationMetadata!
+}
+
+type GroupPaginationResultOutput {
+  items: [Group!]!
   meta: PaginationMetadata!
 }
 
@@ -40,6 +74,10 @@ type Query {
   user(id: Float!): User!
   classLevels(filter: findAllClassLevelInput!): ClassLevelPaginationResultOutput!
   classLevel(classLevelId: Int!): ClassLevel!
+  students(filter: FindAllStudentInput!): StudentPaginationResultOutput!
+  student(studentId: Int!): Student!
+  groups(filter: FindAllGroupInput!): GroupPaginationResultOutput!
+  group(groupId: Int!): Group!
 }
 
 input FindAllUserInput {
@@ -61,8 +99,31 @@ input PaginationInput {
 
 input findAllClassLevelInput {
   name: MatchInput
-  code: MatchInput
   pagination: PaginationInput!
+  sort: SortInput
+}
+
+input SortInput {
+  by: String!
+  type: String!
+}
+
+input FindAllStudentInput {
+  name: MatchInput
+  firstName: MatchInput
+  lastName: MatchInput
+  dateOfBirth: MatchInput
+  gender: MatchInput
+  email: MatchInput
+  phone: MatchInput
+  address: MatchInput
+  pagination: PaginationInput!
+}
+
+input FindAllGroupInput {
+  name: MatchInput
+  pagination: PaginationInput!
+  sort: SortInput
 }
 
 type Mutation {
@@ -72,6 +133,12 @@ type Mutation {
   createClassLevel(createClassLevelInput: CreateClassLevelInput!): ClassLevel!
   updateClassLevel(updateClassLevelInput: UpdateClassLevelInput!): ClassLevel!
   removeClassLevel(classLevelId: Int!): ClassLevel!
+  createStudent(createStudentInput: CreateStudentInput!): Student!
+  updateStudent(updateStudentInput: UpdateStudentInput!): Student!
+  removeStudent(studentId: Int!): Student!
+  createGroup(createGroupInput: CreateGroupInput!): Group!
+  updateGroup(updateGroupInput: UpdateGroupInput!): Group!
+  removeGroup(groupId: Int!): Group!
 }
 
 input CreateUserInput {
@@ -88,12 +155,44 @@ input UpdateUserInput {
 }
 
 input CreateClassLevelInput {
-  name: String
-  code: String!
+  name: String!
 }
 
 input UpdateClassLevelInput {
   name: String
-  code: String
+  id: Int!
+}
+
+input CreateStudentInput {
+  firstName: String!
+  lastName: String!
+  dateOfBirth: DateTime!
+  gender: String
+  email: String!
+  phone: String
+  address: String
+  groupId: Int
+}
+
+input UpdateStudentInput {
+  firstName: String
+  lastName: String
+  dateOfBirth: DateTime
+  gender: String
+  email: String
+  phone: String
+  address: String
+  groupId: Int
+  id: Int!
+}
+
+input CreateGroupInput {
+  name: String!
+  classLevelId: Int!
+}
+
+input UpdateGroupInput {
+  name: String
+  classLevelId: Int
   id: Int!
 }
