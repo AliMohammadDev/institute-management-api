@@ -55,16 +55,13 @@ export class ClassLevelService {
   }
 
   async update(updateClassLevelInput: UpdateClassLevelInput): Promise<ClassLevel | null> {
-    const classLevel = await this.findOne({ id: updateClassLevelInput.id });
-    if (!classLevel) return null;
-    Object.assign(classLevel, updateClassLevelInput);
-    return await this.classLevelRepository.save(classLevel);
+    await this.classLevelRepository.update({ id: updateClassLevelInput.id }, updateClassLevelInput);
+
+    return this.findOne({ id: updateClassLevelInput.id });
   }
 
-  async remove(classLevelId: number): Promise<ClassLevel | null> {
-    const classLevel = await this.findOne({ id: classLevelId }, { relations: { groups: true } });
-    if (!classLevel) return null;
-    await this.classLevelRepository.delete(classLevelId);
-    return classLevel;
+  async remove(classLevelId: number): Promise<boolean> {
+    const result = await this.classLevelRepository.delete(classLevelId);
+    return result.affected !== 0;
   }
 }
