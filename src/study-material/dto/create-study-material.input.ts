@@ -17,25 +17,5 @@ export class CreateStudyMaterialInput {
   @IsNotEmpty()
   @IsString()
   @Field()
-  firstName: string;
-
-  @IsNotEmpty()
-  @IsString()
-  @Field()
-  lastName: string;
-
-  @IsNotEmpty()
-  @IsString()
-  @Field()
-  address: string;
-
-  @IsNotEmpty()
-  @IsString()
-  @Field()
-  email: string;
-
-  @IsNotEmpty()
-  @IsString()
-  @Field()
-  phone: string;
+  name: string;
 }

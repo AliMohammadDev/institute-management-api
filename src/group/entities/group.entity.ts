@@ -1,6 +1,7 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { ClassLevel } from 'src/class-level/entities/class-level.entity';
 import { Student } from 'src/student/entities/student.entity';
+import { TeacherShared } from 'src/teacher-shared/entities/teacher-shared.entity';
 import { BaseEntity, Column, Entity, Index, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @ObjectType()
@@ -22,4 +23,8 @@ export class Group extends BaseEntity {
   @OneToMany(() => Student, (student) => student.group)
   @Field(() => [Student], { nullable: 'itemsAndList' })
   students?: Student[];
+
+  @OneToMany(() => TeacherShared, (teacherShared) => teacherShared.group)
+  @Field(() => [TeacherShared], { nullable: true })
+  teacherShareds?: TeacherShared[];
 }

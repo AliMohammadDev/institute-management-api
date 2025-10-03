@@ -2,26 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type User {
-  createdAt: String!
-  updatedAt: String!
-  id: Int!
-  fullName: String
-  email: String!
-}
-
-type PaginationMetadata {
-  total: Int
-  currentPage: Int
-  itemsPerPage: Int
-  totalPages: Int
-}
-
-type UserPaginationResultOutput {
-  items: [User!]!
-  meta: PaginationMetadata!
-}
-
 type Student {
   id: Int!
   firstName: String!
@@ -54,8 +34,34 @@ type ClassLevel {
   groups: [Group]
 }
 
+type PaginationMetadata {
+  total: Int
+  currentPage: Int
+  itemsPerPage: Int
+  totalPages: Int
+}
+
 type ClassLevelPaginationResultOutput {
   items: [ClassLevel!]!
+  meta: PaginationMetadata!
+}
+
+type StudyMaterial {
+  id: Int!
+  name: String!
+}
+
+type StudyMaterialPaginationResultOutput {
+  items: [StudyMaterial!]!
+  meta: PaginationMetadata!
+}
+
+type DoneResponseOutput {
+  done: Boolean!
+}
+
+type GroupPaginationResultOutput {
+  items: [Group!]!
   meta: PaginationMetadata!
 }
 
@@ -64,27 +70,42 @@ type StudentPaginationResultOutput {
   meta: PaginationMetadata!
 }
 
-type GroupPaginationResultOutput {
-  items: [Group!]!
+type Appointment {
+  id: Int!
+  startTime: String!
+  endTime: String!
+  description: String
+  period: TimePeriod!
+}
+
+"""حدد الفترة الزمنية: صباحية (AM) أو مسائية (PM)"""
+enum TimePeriod {
+  AM
+  PM
+}
+
+type AppointmentPaginationResultOutput {
+  items: [Appointment!]!
   meta: PaginationMetadata!
 }
 
 type Query {
-  users(filter: FindAllUserInput!): UserPaginationResultOutput!
-  user(id: Float!): User!
   classLevels(filter: findAllClassLevelInput!): ClassLevelPaginationResultOutput!
   classLevel(classLevelId: Int!): ClassLevel!
-  students(filter: FindAllStudentInput!): StudentPaginationResultOutput!
-  student(studentId: Int!): Student!
+  studyMaterials(filter: FindAllStudyMaterialInput!): StudyMaterialPaginationResultOutput!
+  studyMaterial(id: Int!): StudyMaterial!
   groups(filter: FindAllGroupInput!): GroupPaginationResultOutput!
   group(groupId: Int!): Group!
+  students(filter: FindAllStudentInput!): StudentPaginationResultOutput!
+  student(studentId: Int!): Student!
+  appointments(filter: FindAllAppointmentInput!): AppointmentPaginationResultOutput!
+  appointment(id: Int!): Appointment!
 }
 
-input FindAllUserInput {
-  fullName: MatchInput
-  password: MatchInput
-  email: MatchInput
+input findAllClassLevelInput {
+  name: MatchInput
   pagination: PaginationInput!
+  sort: SortInput
 }
 
 input MatchInput {
@@ -97,15 +118,21 @@ input PaginationInput {
   page: Int!
 }
 
-input findAllClassLevelInput {
-  name: MatchInput
-  pagination: PaginationInput!
-  sort: SortInput
-}
-
 input SortInput {
   by: String!
   type: String!
+}
+
+input FindAllStudyMaterialInput {
+  pagination: PaginationInput!
+  sort: SortInput
+  name: MatchInput
+}
+
+input FindAllGroupInput {
+  name: MatchInput
+  pagination: PaginationInput!
+  sort: SortInput
 }
 
 input FindAllStudentInput {
@@ -120,38 +147,28 @@ input FindAllStudentInput {
   pagination: PaginationInput!
 }
 
-input FindAllGroupInput {
-  name: MatchInput
+input FindAllAppointmentInput {
   pagination: PaginationInput!
   sort: SortInput
+  period: MatchInput
 }
 
 type Mutation {
-  createUser(createUserInput: CreateUserInput!): User!
-  updateUser(updateUserInput: UpdateUserInput!): User!
-  removeUser(id: Int!): User!
   createClassLevel(createClassLevelInput: CreateClassLevelInput!): ClassLevel!
   updateClassLevel(updateClassLevelInput: UpdateClassLevelInput!): ClassLevel!
   removeClassLevel(classLevelId: Int!): Boolean!
-  createStudent(createStudentInput: CreateStudentInput!): Student!
-  updateStudent(updateStudentInput: UpdateStudentInput!): Student!
-  removeStudent(studentId: Int!): Student!
+  createStudyMaterial(createStudyMaterialInput: CreateStudyMaterialInput!): StudyMaterial!
+  updateStudyMaterial(updateStudyMaterialInput: UpdateStudyMaterialInput!): StudyMaterial!
+  removeStudyMaterial(id: Int!): DoneResponseOutput!
   createGroup(createGroupInput: CreateGroupInput!): Group!
   updateGroup(updateGroupInput: UpdateGroupInput!): Group!
   removeGroup(groupId: Int!): Group!
-}
-
-input CreateUserInput {
-  fullName: String
-  email: String!
-  password: String!
-}
-
-input UpdateUserInput {
-  fullName: String
-  email: String
-  password: String
-  id: Float!
+  createStudent(createStudentInput: CreateStudentInput!): Student!
+  updateStudent(updateStudentInput: UpdateStudentInput!): Student!
+  removeStudent(studentId: Int!): Student!
+  createAppointment(createAppointmentInput: CreateAppointmentInput!): Appointment!
+  updateAppointment(updateAppointmentInput: UpdateAppointmentInput!): Appointment!
+  removeAppointment(id: Int!): Appointment!
 }
 
 input CreateClassLevelInput {
@@ -160,6 +177,26 @@ input CreateClassLevelInput {
 
 input UpdateClassLevelInput {
   name: String
+  id: Int!
+}
+
+input CreateStudyMaterialInput {
+  name: String!
+}
+
+input UpdateStudyMaterialInput {
+  name: String
+  id: Float!
+}
+
+input CreateGroupInput {
+  name: String!
+  classLevelId: Int!
+}
+
+input UpdateGroupInput {
+  name: String
+  classLevelId: Int
   id: Int!
 }
 
@@ -186,13 +223,17 @@ input UpdateStudentInput {
   id: Int!
 }
 
-input CreateGroupInput {
-  name: String!
-  classLevelId: Int!
+input CreateAppointmentInput {
+  startTime: String!
+  endTime: String!
+  description: String!
+  period: TimePeriod!
 }
 
-input UpdateGroupInput {
-  name: String
-  classLevelId: Int
+input UpdateAppointmentInput {
+  startTime: String
+  endTime: String
+  description: String
+  period: TimePeriod
   id: Int!
 }

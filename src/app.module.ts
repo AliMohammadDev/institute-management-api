@@ -5,11 +5,15 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { GraphQLError } from 'graphql';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UserModule } from './user/user.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ClassLevelModule } from './class-level/class-level.module';
+import { StudyMaterialModule } from './study-material/study-material.module';
+import { GroupModule } from './group/group.module';
+import { StudentModule } from './student/student.module';
+import { AppointmentModule } from './appointment/appointment.module';
+import { TeacherSharedModule } from './teacher-shared/teacher-shared.module';
 
 @Module({
   imports: [
@@ -50,8 +54,14 @@ import { ClassLevelModule } from './class-level/class-level.module';
       },
       plugins: process.env.NODE_ENV !== 'production' ? [ApolloServerPluginLandingPageLocalDefault()] : [],
     }),
-    UserModule,
+
     ClassLevelModule,
+    StudyMaterialModule,
+    GroupModule,
+    StudentModule,
+    ClassLevelModule,
+    AppointmentModule,
+    TeacherSharedModule,
   ],
   controllers: [AppController],
   providers: [AppService],

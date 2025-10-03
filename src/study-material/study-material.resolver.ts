@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { StudyMaterialService } from './study-material.service';
 import { StudyMaterial } from './entities/study-material.entity';
 import { CreateStudyMaterialInput } from './dto/create-study-material.input';
@@ -16,13 +16,13 @@ export class StudyMaterialResolver {
     return this.studyMaterialService.create(createInput);
   }
 
-  @Query(() => StudyMaterialPaginationResultOutput, { name: 'study-materials' })
+  @Query(() => StudyMaterialPaginationResultOutput, { name: 'studyMaterials' })
   public findAll(@Args('filter') filter: FindAllStudyMaterialInput) {
     return this.studyMaterialService.findAll(filter);
   }
 
-  @Query(() => StudyMaterial, { name: 'study-material' })
-  public findOne(@Args('id') id: string) {
+  @Query(() => StudyMaterial, { name: 'studyMaterial' })
+  public findOne(@Args('id', { type: () => Int }) id: number) {
     return this.studyMaterialService.findOne({ id });
   }
 
@@ -32,7 +32,7 @@ export class StudyMaterialResolver {
   }
 
   @Mutation(() => DoneResponseOutput)
-  public removeStudyMaterial(@Args('id') id: string) {
+  public removeStudyMaterial(@Args('id', { type: () => Int }) id: number) {
     this.studyMaterialService.remove(id);
     return { done: true };
   }

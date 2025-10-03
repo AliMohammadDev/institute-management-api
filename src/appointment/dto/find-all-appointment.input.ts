@@ -15,7 +15,7 @@ import {
 } from 'src/shared/types/graphql-input-types';
 
 @InputType()
-export class FindAllTeacherInput {
+export class FindAllAppointmentInput {
   @IsNotEmpty()
   @IsObject()
   @Type(() => PaginationInput)
@@ -32,11 +32,5 @@ export class FindAllTeacherInput {
   @IsObject()
   @Type(() => MatchInput)
   @Field(() => MatchInput, { nullable: true })
-  lastName?: MatchInput;
-
-  @IsOptional()
-  @IsObject()
-  @Type(() => MatchInput)
-  @Field(() => MatchInput, { nullable: true })
-  address?: MatchInput;
+  period?: MatchInput;
 }

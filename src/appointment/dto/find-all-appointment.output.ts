@@ -1,11 +1,12 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+
 import { PaginationMetadata } from 'src/shared/types/pagination-metadata';
-import { User } from '../entities/user.entity';
+import { Appointment } from '../entities/appointment.entity';
 
 @ObjectType()
-export class UserPaginationResultOutput {
-  @Field(() => [User])
-  items: User[];
+export class AppointmentPaginationResultOutput {
+  @Field(() => [Appointment])
+  items: Appointment[];
 
   @Field(() => PaginationMetadata)
   meta: PaginationMetadata;

@@ -17,9 +17,9 @@ export class StudyMaterialService {
     @InjectRepository(StudyMaterial)
     private readonly studyMaterialRepository: Repository<StudyMaterial>,
   ) {}
-  public create(createInput: CreateStudyMaterialInput) {
-    const entity = this.studyMaterialRepository.create(createInput);
-    return this.studyMaterialRepository.save(entity);
+  public create(createStudyMaterialInput: CreateStudyMaterialInput) {
+    const material = this.studyMaterialRepository.create(createStudyMaterialInput);
+    return this.studyMaterialRepository.save(material);
   }
 
   public findAll(filter: FindAllStudyMaterialInput) {
@@ -48,12 +48,12 @@ export class StudyMaterialService {
     });
   }
 
-  public async update(updateInput: UpdateStudyMaterialInput) {
-    await this.studyMaterialRepository.update({ id: updateInput.id }, updateInput);
-    return this.findOne({ id: updateInput.id });
+  public async update(updateStudyMaterialInput: UpdateStudyMaterialInput) {
+    await this.studyMaterialRepository.update({ id: updateStudyMaterialInput.id }, updateStudyMaterialInput);
+    return this.findOne({ id: updateStudyMaterialInput.id });
   }
 
-  public remove(id: string) {
+  public remove(id: number) {
     this.studyMaterialRepository.delete(id);
   }
 }

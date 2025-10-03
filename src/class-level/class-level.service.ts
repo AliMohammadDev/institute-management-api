@@ -4,7 +4,6 @@ import { UpdateClassLevelInput } from './dto/update-class-level.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ClassLevel } from './entities/class-level.entity';
 import { FindOptionsRelations, FindOptionsSelect, FindOptionsWhere, Repository } from 'typeorm';
-import { FindAllUserInput } from 'src/user/dto/find-all-user.input';
 import { generateQueryConditions, generateQuerySorts, metaTransformer } from 'src/shared/helpers';
 import { PaginationMetadata } from 'src/shared/types/pagination-metadata';
 import { paginate } from 'nestjs-typeorm-paginate';

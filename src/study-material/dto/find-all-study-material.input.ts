@@ -32,17 +32,5 @@ export class FindAllStudyMaterialInput {
   @IsObject()
   @Type(() => MatchInput)
   @Field(() => MatchInput, { nullable: true })
-  firstName?: MatchInput;
-
-  @IsOptional()
-  @IsObject()
-  @Type(() => MatchInput)
-  @Field(() => MatchInput, { nullable: true })
-  lastName?: MatchInput;
-
-  @IsOptional()
-  @IsObject()
-  @Type(() => MatchInput)
-  @Field(() => MatchInput, { nullable: true })
-  address?: MatchInput;
+  name?: MatchInput;
 }
