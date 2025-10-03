@@ -132,7 +132,7 @@ type Mutation {
   removeUser(id: Int!): User!
   createClassLevel(createClassLevelInput: CreateClassLevelInput!): ClassLevel!
   updateClassLevel(updateClassLevelInput: UpdateClassLevelInput!): ClassLevel!
-  removeClassLevel(classLevelId: Int!): ClassLevel!
+  removeClassLevel(classLevelId: Int!): Boolean!
   createStudent(createStudentInput: CreateStudentInput!): Student!
   updateStudent(updateStudentInput: UpdateStudentInput!): Student!
   removeStudent(studentId: Int!): Student!

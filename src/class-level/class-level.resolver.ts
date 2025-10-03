@@ -36,19 +36,11 @@ export class ClassLevelResolver {
 
   @Mutation(() => ClassLevel)
   updateClassLevel(@Args('updateClassLevelInput') updateClassLevelInput: UpdateClassLevelInput) {
-    const classLevel = this.classLevelService.update(updateClassLevelInput);
-    if (!classLevel) {
-      throw new NotFoundException(`ClassLevel #${updateClassLevelInput.id} not found`);
-    }
-    return classLevel;
+    return this.classLevelService.update(updateClassLevelInput);
   }
 
-  @Mutation(() => ClassLevel)
-  removeClassLevel(@Args('classLevelId', { type: () => Int }) classLevelId: number) {
-    const classLevel = this.classLevelService.remove(classLevelId);
-    if (!classLevel) {
-      throw new NotFoundException(`ClassLevel #${classLevelId} not found`);
-    }
-    return classLevel;
+  @Mutation(() => Boolean)
+  removeClassLevel(@Args('classLevelId', { type: () => Int }) classLevelId: number): Promise<boolean> {
+    return this.classLevelService.remove(classLevelId);
   }
 }
