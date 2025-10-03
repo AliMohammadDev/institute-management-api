@@ -1,15 +1,18 @@
 import { InputType, Int, Field, Float } from '@nestjs/graphql';
+import { Type } from 'class-transformer';
 import {
   IsArray,
   IsBoolean,
   IsDecimal,
   IsEmail,
   IsEnum,
+  isNotEmpty,
   IsNotEmpty,
   IsNumber,
   IsNumberString,
   IsOptional,
   IsString,
+  ValidateNested,
 } from 'class-validator';
 import { CreateTeacherSharedInput } from 'src/teacher-shared/dto/create-teacher-shared.input';
 
@@ -40,7 +43,9 @@ export class CreateTeacherInput {
   @Field()
   phone: string;
 
-  @IsNotEmpty()
-  @Field(() => [CreateTeacherSharedInput], { nullable: true })
-  sharedIds?: CreateTeacherSharedInput[];
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreateTeacherSharedInput)
+  @Field(() => [CreateTeacherSharedInput])
+  teacherShareds: CreateTeacherSharedInput[];
 }

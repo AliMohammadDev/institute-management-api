@@ -26,7 +26,7 @@ export class TeacherService {
     teacher.firstName = createTeacherInput.firstName;
     teacher.lastName = createTeacherInput.lastName;
     teacher.phone = createTeacherInput.phone;
-    teacher.teacherShareds = createTeacherInput.sharedIds?.map((i) => {
+    teacher.teacherShareds = createTeacherInput.teacherShareds?.map((i) => {
       const teacherShared = new TeacherShared();
       teacherShared.appointmentId = i.appointmentId;
       teacherShared.groupId = i.groupId;

@@ -1,9 +1,10 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { PrimaryGeneratedColumn, Column, BaseEntity, OneToMany } from 'typeorm';
+import { PrimaryGeneratedColumn, Column, BaseEntity, OneToMany, Entity } from 'typeorm';
 import { TimePeriod } from 'src/shared/enums/appointment'; // عدل المسار حسب ملفك
 import { TeacherShared } from 'src/teacher-shared/entities/teacher-shared.entity';
 
 @ObjectType()
+@Entity()
 export class Appointment extends BaseEntity {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   @Field(() => Int)

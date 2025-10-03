@@ -19,11 +19,55 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type Appointment {
+  id: Int!
+  startTime: String!
+  endTime: String!
+  description: String
+  period: TimePeriod!
+  teacherShareds: [TeacherShared!]
+}
+
+"""حدد الفترة الزمنية: صباحية (AM) أو مسائية (PM)"""
+enum TimePeriod {
+  AM
+  PM
+}
+
+type StudyMaterial {
+  id: Int!
+  name: String!
+  teacherShareds: [TeacherShared!]
+}
+
+type Teacher {
+  id: Int!
+  firstName: String!
+  lastName: String!
+  address: String!
+  email: String!
+  phone: String!
+  teacherShareds: [TeacherShared!]
+}
+
+type TeacherShared {
+  id: Int!
+  appointmentId: Int!
+  teacherId: Int!
+  groupId: Int!
+  studyMaterialId: Int!
+  studyMaterial: StudyMaterial
+  group: Group
+  teacher: Teacher
+  appointment: Appointment
+}
+
 type Group {
   id: Int!
   name: String!
   classLevel: ClassLevel
   students: [Student]
+  teacherShareds: [TeacherShared!]
 }
 
 type ClassLevel {
@@ -46,11 +90,6 @@ type ClassLevelPaginationResultOutput {
   meta: PaginationMetadata!
 }
 
-type StudyMaterial {
-  id: Int!
-  name: String!
-}
-
 type StudyMaterialPaginationResultOutput {
   items: [StudyMaterial!]!
   meta: PaginationMetadata!
@@ -70,22 +109,13 @@ type StudentPaginationResultOutput {
   meta: PaginationMetadata!
 }
 
-type Appointment {
-  id: Int!
-  startTime: String!
-  endTime: String!
-  description: String
-  period: TimePeriod!
-}
-
-"""حدد الفترة الزمنية: صباحية (AM) أو مسائية (PM)"""
-enum TimePeriod {
-  AM
-  PM
-}
-
 type AppointmentPaginationResultOutput {
   items: [Appointment!]!
+  meta: PaginationMetadata!
+}
+
+type TeacherPaginationResultOutput {
+  items: [Teacher!]!
   meta: PaginationMetadata!
 }
 
@@ -100,6 +130,9 @@ type Query {
   student(studentId: Int!): Student!
   appointments(filter: FindAllAppointmentInput!): AppointmentPaginationResultOutput!
   appointment(id: Int!): Appointment!
+  teacherShared(id: Int!): TeacherShared!
+  teachers(filter: FindAllTeacherInput!): TeacherPaginationResultOutput!
+  teacher(id: Int!): Teacher!
 }
 
 input findAllClassLevelInput {
@@ -153,6 +186,13 @@ input FindAllAppointmentInput {
   period: MatchInput
 }
 
+input FindAllTeacherInput {
+  pagination: PaginationInput!
+  sort: SortInput
+  lastName: MatchInput
+  address: MatchInput
+}
+
 type Mutation {
   createClassLevel(createClassLevelInput: CreateClassLevelInput!): ClassLevel!
   updateClassLevel(updateClassLevelInput: UpdateClassLevelInput!): ClassLevel!
@@ -169,6 +209,12 @@ type Mutation {
   createAppointment(createAppointmentInput: CreateAppointmentInput!): Appointment!
   updateAppointment(updateAppointmentInput: UpdateAppointmentInput!): Appointment!
   removeAppointment(id: Int!): Appointment!
+  createTeacherShared(createTeacherSharedInput: CreateTeacherSharedInput!): TeacherShared!
+  updateTeacherShared(updateTeacherSharedInput: UpdateTeacherSharedInput!): TeacherShared!
+  removeTeacherShared(id: Int!): TeacherShared!
+  createTeacher(createTeacherInput: CreateTeacherInput!): Teacher!
+  updateTeacher(updateTeacherInput: UpdateTeacherInput!): Teacher!
+  removeTeacher(id: Int!): DoneResponseOutput!
 }
 
 input CreateClassLevelInput {
@@ -186,7 +232,7 @@ input CreateStudyMaterialInput {
 
 input UpdateStudyMaterialInput {
   name: String
-  id: Float!
+  id: Int!
 }
 
 input CreateGroupInput {
@@ -235,5 +281,39 @@ input UpdateAppointmentInput {
   endTime: String
   description: String
   period: TimePeriod
+  id: Int!
+}
+
+input CreateTeacherSharedInput {
+  appointmentId: Int!
+  groupId: Int!
+  studyMaterialId: Int!
+  teacherId: Int!
+}
+
+input UpdateTeacherSharedInput {
+  appointmentId: Int
+  groupId: Int
+  studyMaterialId: Int
+  teacherId: Int
+  id: Int!
+}
+
+input CreateTeacherInput {
+  firstName: String!
+  lastName: String!
+  address: String!
+  email: String!
+  phone: String!
+  teacherShareds: [CreateTeacherSharedInput!]!
+}
+
+input UpdateTeacherInput {
+  firstName: String
+  lastName: String
+  address: String
+  email: String
+  phone: String
+  teacherShareds: [CreateTeacherSharedInput!]
   id: Int!
 }

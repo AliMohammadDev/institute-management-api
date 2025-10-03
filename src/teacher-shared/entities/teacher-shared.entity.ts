@@ -3,9 +3,10 @@ import { Appointment } from 'src/appointment/entities/appointment.entity';
 import { Group } from 'src/group/entities/group.entity';
 import { StudyMaterial } from 'src/study-material/entities/study-material.entity';
 import { Teacher } from 'src/teacher/entities/teacher.entity';
-import { Column, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @ObjectType()
+@Entity()
 export class TeacherShared {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   @Field(() => Int)

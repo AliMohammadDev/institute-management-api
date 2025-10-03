@@ -14,6 +14,7 @@ import { GroupModule } from './group/group.module';
 import { StudentModule } from './student/student.module';
 import { AppointmentModule } from './appointment/appointment.module';
 import { TeacherSharedModule } from './teacher-shared/teacher-shared.module';
+import { TeacherModule } from './teacher/teacher.module';
 
 @Module({
   imports: [
@@ -62,6 +63,7 @@ import { TeacherSharedModule } from './teacher-shared/teacher-shared.module';
     ClassLevelModule,
     AppointmentModule,
     TeacherSharedModule,
+    TeacherModule,
   ],
   controllers: [AppController],
   providers: [AppService],
