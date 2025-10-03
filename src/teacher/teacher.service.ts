@@ -64,9 +64,9 @@ export class TeacherService {
     });
   }
 
-  public async update(updateInput: UpdateTeacherInput) {
-    await this.teacherRepository.update({ id: updateInput.id }, updateInput);
-    return this.findOne({ id: updateInput.id });
+  public async update(updateTeacherInput: UpdateTeacherInput) {
+    await this.teacherRepository.update({ id: updateTeacherInput.id }, updateTeacherInput);
+    return this.findOne({ id: updateTeacherInput.id });
   }
 
   public remove(id: number) {

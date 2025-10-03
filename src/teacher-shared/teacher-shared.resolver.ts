@@ -3,33 +3,36 @@ import { TeacherSharedService } from './teacher-shared.service';
 import { TeacherShared } from './entities/teacher-shared.entity';
 import { CreateTeacherSharedInput } from './dto/create-teacher-shared.input';
 import { UpdateTeacherSharedInput } from './dto/update-teacher-shared.input';
+import { TeacherSharedPaginationResultOutput } from './dto/find-all-teacher-shared.output';
+import { FindAllTeacherSharedInput } from './dto/find-all-teacher-shared.input';
+import { DoneResponseOutput } from 'src/shared/types/done-output';
 
 @Resolver(() => TeacherShared)
 export class TeacherSharedResolver {
   constructor(private readonly teacherSharedService: TeacherSharedService) {}
 
   @Mutation(() => TeacherShared)
-  createTeacherShared(@Args('createTeacherSharedInput') createTeacherSharedInput: CreateTeacherSharedInput) {
+  public createTeacherShared(@Args('createTeacherSharedInput') createTeacherSharedInput: CreateTeacherSharedInput) {
     return this.teacherSharedService.create(createTeacherSharedInput);
   }
 
-  @Query(() => [TeacherShared], { name: 'teacherShared' })
-  findAll() {
-    return this.teacherSharedService.findAll();
+  @Query(() => TeacherSharedPaginationResultOutput, { name: 'teacherShareds' })
+  public findAll(@Args('filter') filter: FindAllTeacherSharedInput) {
+    return this.teacherSharedService.findAll(filter);
   }
 
   @Query(() => TeacherShared, { name: 'teacherShared' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.teacherSharedService.findOne(id);
+  public findOne(@Args('id', { type: () => Int }) id: number) {
+    return this.teacherSharedService.findOne({ id });
   }
 
   @Mutation(() => TeacherShared)
-  updateTeacherShared(@Args('updateTeacherSharedInput') updateTeacherSharedInput: UpdateTeacherSharedInput) {
-    return this.teacherSharedService.update(updateTeacherSharedInput.id, updateTeacherSharedInput);
+  public updateTeacherShared(@Args('updateTeacherSharedInput') updateTeacherSharedInput: UpdateTeacherSharedInput) {
+    return this.teacherSharedService.update(updateTeacherSharedInput);
   }
 
-  @Mutation(() => TeacherShared)
-  removeTeacherShared(@Args('id', { type: () => Int }) id: number) {
+  @Mutation(() => DoneResponseOutput)
+  public removeTeacherShared(@Args('id', { type: () => Int }) id: number) {
     return this.teacherSharedService.remove(id);
   }
 }

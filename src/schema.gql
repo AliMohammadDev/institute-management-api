@@ -114,6 +114,11 @@ type AppointmentPaginationResultOutput {
   meta: PaginationMetadata!
 }
 
+type TeacherSharedPaginationResultOutput {
+  items: [TeacherShared!]!
+  meta: PaginationMetadata!
+}
+
 type TeacherPaginationResultOutput {
   items: [Teacher!]!
   meta: PaginationMetadata!
@@ -130,6 +135,7 @@ type Query {
   student(studentId: Int!): Student!
   appointments(filter: FindAllAppointmentInput!): AppointmentPaginationResultOutput!
   appointment(id: Int!): Appointment!
+  teacherShareds(filter: FindAllTeacherSharedInput!): TeacherSharedPaginationResultOutput!
   teacherShared(id: Int!): TeacherShared!
   teachers(filter: FindAllTeacherInput!): TeacherPaginationResultOutput!
   teacher(id: Int!): Teacher!
@@ -186,6 +192,11 @@ input FindAllAppointmentInput {
   period: MatchInput
 }
 
+input FindAllTeacherSharedInput {
+  pagination: PaginationInput!
+  sort: SortInput
+}
+
 input FindAllTeacherInput {
   pagination: PaginationInput!
   sort: SortInput
@@ -211,7 +222,7 @@ type Mutation {
   removeAppointment(id: Int!): Appointment!
   createTeacherShared(createTeacherSharedInput: CreateTeacherSharedInput!): TeacherShared!
   updateTeacherShared(updateTeacherSharedInput: UpdateTeacherSharedInput!): TeacherShared!
-  removeTeacherShared(id: Int!): TeacherShared!
+  removeTeacherShared(id: Int!): DoneResponseOutput!
   createTeacher(createTeacherInput: CreateTeacherInput!): Teacher!
   updateTeacher(updateTeacherInput: UpdateTeacherInput!): Teacher!
   removeTeacher(id: Int!): DoneResponseOutput!

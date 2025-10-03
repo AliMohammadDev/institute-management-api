@@ -1,26 +1,54 @@
 import { Injectable } from '@nestjs/common';
-import { CreateTeacherSharedInput } from './dto/create-teacher-shared.input';
+import { FindAllTeacherSharedInput } from './dto/find-all-teacher-shared.input';
+import { InjectRepository } from '@nestjs/typeorm';
+import { FindOptionsRelations, FindOptionsSelect, FindOptionsWhere, Repository } from 'typeorm';
+import { paginate } from 'nestjs-typeorm-paginate';
+import { PaginationMetadata } from 'src/shared/types/pagination-metadata';
+import { generateQueryConditions, generateQuerySorts, metaTransformer } from 'src/shared/helpers';
+import { TeacherShared } from './entities/teacher-shared.entity';
 import { UpdateTeacherSharedInput } from './dto/update-teacher-shared.input';
-
+import { CreateTeacherSharedInput } from './dto/create-teacher-shared.input';
 @Injectable()
 export class TeacherSharedService {
-  create(createTeacherSharedInput: CreateTeacherSharedInput) {
-    return 'This action adds a new teacherShared';
+  constructor(
+    @InjectRepository(TeacherShared)
+    private readonly TeacherSharedRepository: Repository<TeacherShared>,
+  ) {}
+  public create(createTeacherSharedInput: CreateTeacherSharedInput) {
+    return 'This action adds a new TeacherShared';
   }
 
-  findAll() {
-    return `This action returns all teacherShared`;
+  public findAll(filter: FindAllTeacherSharedInput) {
+    const query = this.TeacherSharedRepository.createQueryBuilder('teacher_Shared').where('true');
+    generateQuerySorts<TeacherShared>(query, filter, TeacherShared, 'Teacher_shared');
+    generateQueryConditions<TeacherShared>(query, filter, 'Teacher_shared');
+
+    return paginate<TeacherShared, PaginationMetadata>(query, {
+      limit: filter.pagination.limit,
+      page: filter.pagination.page,
+      metaTransformer,
+    });
+  }
+  public findOne(
+    TeacherSharedOptions: FindOptionsWhere<TeacherShared>,
+    options?: {
+      selected?: FindOptionsSelect<TeacherShared>;
+      relations?: FindOptionsRelations<TeacherShared>;
+    },
+  ) {
+    return this.TeacherSharedRepository.findOne({
+      select: options?.selected,
+      relations: options?.relations,
+      where: TeacherSharedOptions,
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} teacherShared`;
+  public async update(updateTeacherSharedInput: UpdateTeacherSharedInput) {
+    await this.TeacherSharedRepository.update({ id: updateTeacherSharedInput.id }, updateTeacherSharedInput);
+    return this.findOne({ id: updateTeacherSharedInput.id });
   }
 
-  update(id: number, updateTeacherSharedInput: UpdateTeacherSharedInput) {
-    return `This action updates a #${id} teacherShared`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} teacherShared`;
+  public remove(id: number) {
+    this.TeacherSharedRepository.delete(id);
   }
 }
