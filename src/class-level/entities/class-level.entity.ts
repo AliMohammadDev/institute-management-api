@@ -15,6 +15,6 @@ export class ClassLevel extends BaseEntity {
   name: string;
 
   @OneToMany(() => Group, (group) => group.classLevel)
-  @Field(() => [Group], { nullable: 'itemsAndList' })
+  @Field(() => [Group], { nullable: true })
   groups?: Group[];
 }

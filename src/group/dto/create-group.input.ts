@@ -1,13 +1,15 @@
 import { InputType, Field, Int } from '@nestjs/graphql';
-import { IsInt, IsString } from 'class-validator';
+import { IsInt, IsNotEmpty, isNotEmpty, IsString } from 'class-validator';
 
 @InputType()
 export class CreateGroupInput {
-  @Field()
+  @IsNotEmpty()
   @IsString()
+  @Field(() => String)
   name: string;
 
-  @Field(() => Int)
+  @IsNotEmpty()
   @IsInt()
+  @Field(() => Int)
   classLevelId: number;
 }

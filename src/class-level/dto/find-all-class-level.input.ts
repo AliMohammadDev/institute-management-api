@@ -5,7 +5,7 @@ import { MatchInput, PaginationInput, SortInput } from 'src/shared/types/graphql
 
 @InputType()
 export class findAllClassLevelInput {
-  @IsOptional()
+  @IsNotEmpty()
   @IsObject()
   @Type(() => MatchInput)
   @Field(() => MatchInput, { nullable: true })

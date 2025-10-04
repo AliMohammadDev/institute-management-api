@@ -1,7 +1,7 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { Type } from 'class-transformer';
 import { IsDateString, IsNotEmpty, IsObject, IsOptional } from 'class-validator';
-import { MatchInput, PaginationInput } from 'src/shared/types/graphql-input-types';
+import { MatchInput, PaginationInput, SortInput } from 'src/shared/types/graphql-input-types';
 
 @InputType()
 export class FindAllStudentInput {
@@ -58,4 +58,10 @@ export class FindAllStudentInput {
   @Type(() => PaginationInput)
   @Field(() => PaginationInput)
   pagination: PaginationInput;
+
+  @IsOptional()
+  @IsObject()
+  @Type(() => SortInput)
+  @Field(() => SortInput, { nullable: true })
+  sort?: SortInput;
 }

@@ -1,8 +1,11 @@
+import { IsNotEmpty, IsNumber } from 'class-validator';
 import { CreateGroupInput } from './create-group.input';
 import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
 
 @InputType()
 export class UpdateGroupInput extends PartialType(CreateGroupInput) {
+  @IsNotEmpty()
+  @IsNumber()
   @Field(() => Int)
   id: number;
 }

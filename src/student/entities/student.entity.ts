@@ -1,6 +1,7 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { Group } from 'src/group/entities/group.entity';
-import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Gender } from 'src/shared/enums/gender';
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @ObjectType()
 @Entity()
@@ -27,9 +28,9 @@ export class Student extends BaseEntity {
   @Field(() => Date)
   dateOfBirth: Date;
 
-  @Column('varchar', { length: 50, nullable: true })
-  @Field({ nullable: true })
-  gender?: string;
+  @Column({ type: 'enum', enum: Gender })
+  @Field(() => Gender)
+  gender?: Gender;
 
   @Column('varchar', { length: 255, unique: true })
   @Field()
@@ -43,7 +44,11 @@ export class Student extends BaseEntity {
   @Field({ nullable: true })
   address?: string;
 
+  @Column('bigint', { nullable: true })
+  groupId?: number;
+
   @ManyToOne(() => Group, (group) => group.students, { onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'groupId' })
   @Field(() => Group, { nullable: true })
   group?: Group;
 }

@@ -3,16 +3,16 @@ import { ClassLevelService } from './class-level.service';
 import { ClassLevel } from './entities/class-level.entity';
 import { CreateClassLevelInput } from './dto/create-class-level.input';
 import { UpdateClassLevelInput } from './dto/update-class-level.input';
-import { NotFoundException } from '@nestjs/common';
 import { ClassLevelPaginationResultOutput } from './dto/find-all-class-level.output';
 import { findAllClassLevelInput } from './dto/find-all-class-level.input';
+import { DoneResponseOutput } from 'src/shared/types/done-output';
 
 @Resolver(() => ClassLevel)
 export class ClassLevelResolver {
   constructor(private readonly classLevelService: ClassLevelService) {}
 
   @Mutation(() => ClassLevel)
-  createClassLevel(@Args('createClassLevelInput') createClassLevelInput: CreateClassLevelInput) {
+  public createClassLevel(@Args('createClassLevelInput') createClassLevelInput: CreateClassLevelInput) {
     return this.classLevelService.create(createClassLevelInput);
   }
 
@@ -22,25 +22,18 @@ export class ClassLevelResolver {
   }
 
   @Query(() => ClassLevel, { name: 'classLevel' })
-  findOne(@Args('classLevelId', { type: () => Int }) classLevelId: number) {
-    const classLevel = this.classLevelService.findOne(
-      { id: classLevelId },
-      { relations: { groups: { students: true } } },
-    );
-    if (!classLevel) {
-      throw new NotFoundException(`ClassLevel #${classLevelId} not found`);
-    }
-
-    return classLevel;
+  public findOne(@Args('id', { type: () => Int }) id: number) {
+    return this.classLevelService.findOne({ id });
   }
 
   @Mutation(() => ClassLevel)
-  updateClassLevel(@Args('updateClassLevelInput') updateClassLevelInput: UpdateClassLevelInput) {
+  public updateClassLevel(@Args('updateClassLevelInput') updateClassLevelInput: UpdateClassLevelInput) {
     return this.classLevelService.update(updateClassLevelInput);
   }
 
-  @Mutation(() => Boolean)
-  removeClassLevel(@Args('classLevelId', { type: () => Int }) classLevelId: number): Promise<boolean> {
-    return this.classLevelService.remove(classLevelId);
+  @Mutation(() => DoneResponseOutput)
+  public removeClassLevel(@Args('id', { type: () => Int }) id: number) {
+    this.classLevelService.remove(id);
+    return { done: true };
   }
 }

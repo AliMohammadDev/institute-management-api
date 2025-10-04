@@ -1,10 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateStudentInput } from './dto/create-student.input';
 import { UpdateStudentInput } from './dto/update-student.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Student } from './entities/student.entity';
 import { FindOptionsRelations, FindOptionsSelect, FindOptionsWhere, Repository } from 'typeorm';
-import { GroupService } from 'src/group/group.service';
 import { FindAllStudentInput } from './dto/find-all-student.input';
 import { generateQueryConditions, generateQuerySorts, metaTransformer } from 'src/shared/helpers';
 import { PaginationMetadata } from 'src/shared/types/pagination-metadata';
@@ -15,23 +14,16 @@ export class StudentService {
   constructor(
     @InjectRepository(Student)
     private readonly studentRepository: Repository<Student>,
-    private readonly groupService: GroupService,
   ) {}
-  async create(createStudentInput: CreateStudentInput) {
-    const { groupId, dateOfBirth, ...rest } = createStudentInput;
 
-    const group = await this.groupService.findOne({ id: groupId });
-    if (!group) throw new NotFoundException('Group not found');
+  public async create(createStudentInput: CreateStudentInput) {
+    const student = this.studentRepository.create(createStudentInput);
+    await this.studentRepository.save(student);
 
-    const student = this.studentRepository.create({
-      ...rest,
-      dateOfBirth: new Date(dateOfBirth),
-      group,
-    });
-    return await this.studentRepository.save(student);
+    return this.findOne({ id: student.id });
   }
 
-  async findAll(filter: FindAllStudentInput) {
+  public findAll(filter: FindAllStudentInput) {
     const query = this.studentRepository
       .createQueryBuilder('student')
       .leftJoinAndSelect('student.group', 'group')
@@ -49,43 +41,28 @@ export class StudentService {
     });
   }
 
-  async findOne(
-    groupOptions: FindOptionsWhere<Student>,
+  public findOne(
+    studentOptions: FindOptionsWhere<Student>,
     options?: {
       selected?: FindOptionsSelect<Student>;
       relations?: FindOptionsRelations<Student>;
     },
-  ): Promise<Student | null> {
-    const student = await this.studentRepository.findOne({
-      where: groupOptions,
+  ) {
+    const student = this.studentRepository.findOne({
+      where: studentOptions,
       select: options?.selected,
-      relations: options?.relations ?? { group: true },
+      relations: options?.relations ?? { group: { classLevel: true } },
     });
-    return student || null;
+    return student;
   }
 
-  async update(updateStudentInput: UpdateStudentInput): Promise<Student | null> {
-    const student = await this.findOne({ id: updateStudentInput.id }, { relations: { group: true } });
-    if (!student) return null;
+  public async update(updateStudentInput: UpdateStudentInput) {
+    await this.studentRepository.update({ id: updateStudentInput.id }, updateStudentInput);
 
-    const { groupId, ...rest } = updateStudentInput;
-    Object.assign(student, rest);
-
-    if (groupId) {
-      const newGroup = await this.groupService.findOne({ id: groupId });
-      if (!newGroup) {
-        throw new NotFoundException(`ClassLevel #${groupId} not found`);
-      }
-      student.group = newGroup;
-    }
-
-    return await this.studentRepository.save(student);
+    return this.findOne({ id: updateStudentInput.id });
   }
 
-  async remove(studentId: number): Promise<Student | null> {
-    const group = await this.findOne({ id: studentId }, { relations: { group: { classLevel: true } } });
-    if (!group) return null;
-    await this.studentRepository.delete(studentId);
-    return group;
+  public remove(id: number) {
+    this.studentRepository.delete(id);
   }
 }

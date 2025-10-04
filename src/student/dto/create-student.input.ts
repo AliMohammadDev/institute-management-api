@@ -1,40 +1,41 @@
 import { InputType, Field, Int } from '@nestjs/graphql';
 import { Type } from 'class-transformer';
-import { IsDateString, IsString, IsEmail, IsOptional, IsInt } from 'class-validator';
+import { IsDateString, IsString, IsEmail, IsOptional, IsInt, IsEnum } from 'class-validator';
+import { Gender } from 'src/shared/enums/gender';
 
 @InputType()
 export class CreateStudentInput {
-  @Field()
   @IsString()
+  @Field(() => String)
   firstName: string;
 
-  @Field()
   @IsString()
+  @Field(() => String)
   lastName: string;
 
-  @Field()
   @IsDateString()
   @Type(() => Date)
+  @Field(() => Date)
   dateOfBirth: Date;
 
-  @Field({ nullable: true })
-  @IsString()
-  gender?: string;
+  @IsEnum(Gender)
+  @Field(() => Gender)
+  gender: Gender;
 
-  @Field()
   @IsEmail()
+  @Field(() => String)
   email: string;
 
-  @Field({ nullable: true })
   @IsString()
-  phone?: string;
+  @Field(() => String)
+  phone: string;
 
-  @Field({ nullable: true })
   @IsString()
+  @Field(() => String)
   address?: string;
 
-  @Field(() => Int, { nullable: true })
   @IsOptional()
   @IsInt()
+  @Field(() => Int, { nullable: true })
   groupId?: number;
 }

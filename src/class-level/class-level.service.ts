@@ -15,12 +15,12 @@ export class ClassLevelService {
     @InjectRepository(ClassLevel)
     private readonly classLevelRepository: Repository<ClassLevel>,
   ) {}
-  async create(createClassLevelInput: CreateClassLevelInput): Promise<ClassLevel> {
+  create(createClassLevelInput: CreateClassLevelInput) {
     const newClassLevel = this.classLevelRepository.create(createClassLevelInput);
-    return await this.classLevelRepository.save(newClassLevel);
+    return this.classLevelRepository.save(newClassLevel);
   }
 
-  async findAll(filter: findAllClassLevelInput) {
+  public findAll(filter: findAllClassLevelInput) {
     const query = this.classLevelRepository
       .createQueryBuilder('classLevel')
       .leftJoinAndSelect('classLevel.groups', 'group')
@@ -38,29 +38,28 @@ export class ClassLevelService {
     });
   }
 
-  async findOne(
+  findOne(
     classLevelOptions: FindOptionsWhere<ClassLevel>,
     options?: {
       selected?: FindOptionsSelect<ClassLevel>;
       relations?: FindOptionsRelations<ClassLevel>;
     },
-  ): Promise<ClassLevel | null> {
-    const classLevel = await this.classLevelRepository.findOne({
+  ) {
+    const classLevel = this.classLevelRepository.findOne({
       where: classLevelOptions,
       select: options?.selected,
-      relations: options?.relations,
+      relations: options?.relations ?? { groups: { students: true } },
     });
-    return classLevel || null;
+    return classLevel;
   }
 
-  async update(updateClassLevelInput: UpdateClassLevelInput): Promise<ClassLevel | null> {
-    await this.classLevelRepository.update({ id: updateClassLevelInput.id }, updateClassLevelInput);
+  public update(updateClassLevelInput: UpdateClassLevelInput) {
+    this.classLevelRepository.update({ id: updateClassLevelInput.id }, updateClassLevelInput);
 
     return this.findOne({ id: updateClassLevelInput.id });
   }
 
-  async remove(classLevelId: number): Promise<boolean> {
-    const result = await this.classLevelRepository.delete(classLevelId);
-    return result.affected !== 0;
+  async remove(id: number) {
+    this.classLevelRepository.delete(id);
   }
 }
