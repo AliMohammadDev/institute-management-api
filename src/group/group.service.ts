@@ -52,8 +52,8 @@ export class GroupService {
     return group;
   }
 
-  public update(updateGroupInput: UpdateGroupInput) {
-    this.groupRepository.update({ id: updateGroupInput.id }, updateGroupInput);
+  public async update(updateGroupInput: UpdateGroupInput) {
+    await this.groupRepository.update({ id: updateGroupInput.id }, updateGroupInput);
 
     return this.findOne({ id: updateGroupInput.id });
   }
