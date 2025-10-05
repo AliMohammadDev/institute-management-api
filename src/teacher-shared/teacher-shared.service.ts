@@ -15,13 +15,19 @@ export class TeacherSharedService {
     private readonly TeacherSharedRepository: Repository<TeacherShared>,
   ) {}
   public create(createTeacherSharedInput: CreateTeacherSharedInput) {
-    return 'This action adds a new TeacherShared';
+    const teacherShared = this.TeacherSharedRepository.create(createTeacherSharedInput);
+    return this.TeacherSharedRepository.save(teacherShared);
   }
 
   public findAll(filter: FindAllTeacherSharedInput) {
-    const query = this.TeacherSharedRepository.createQueryBuilder('teacher_Shared').where('true');
-    generateQuerySorts<TeacherShared>(query, filter, TeacherShared, 'Teacher_shared');
-    generateQueryConditions<TeacherShared>(query, filter, 'Teacher_shared');
+    const query = this.TeacherSharedRepository.createQueryBuilder('teacher_shared')
+      .leftJoinAndSelect('teacher_shared.teacher', 'teacher')
+      .leftJoinAndSelect('teacher_shared.studyMaterial', 'studyMaterial')
+      .leftJoinAndSelect('teacher_shared.appointment', 'appointment')
+      .leftJoinAndSelect('teacher_shared.group', 'group')
+      .where('true');
+    generateQuerySorts<TeacherShared>(query, filter, TeacherShared, 'teacher_shared');
+    generateQueryConditions<TeacherShared>(query, filter, 'teacher_shared');
 
     return paginate<TeacherShared, PaginationMetadata>(query, {
       limit: filter.pagination.limit,

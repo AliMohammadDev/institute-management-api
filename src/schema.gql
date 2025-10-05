@@ -30,8 +30,20 @@ type Appointment {
   startTime: String!
   endTime: String!
   description: String
+  day: WeekDay!
   period: TimePeriod!
   teacherShareds: [TeacherShared!]
+}
+
+"""أيام الأسبوع من الأحد إلى السبت"""
+enum WeekDay {
+  SUNDAY
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
 }
 
 """حدد الفترة الزمنية: صباحية (AM) أو مسائية (PM)"""
@@ -59,7 +71,7 @@ type Teacher {
 type TeacherShared {
   id: Int!
   appointmentId: Int!
-  teacherId: Int!
+  teacherId: Int
   groupId: Int!
   studyMaterialId: Int!
   studyMaterial: StudyMaterial
@@ -293,6 +305,7 @@ input CreateAppointmentInput {
   endTime: String!
   description: String!
   period: TimePeriod!
+  day: WeekDay!
 }
 
 input UpdateAppointmentInput {
@@ -300,6 +313,7 @@ input UpdateAppointmentInput {
   endTime: String
   description: String
   period: TimePeriod
+  day: WeekDay
   id: Int!
 }
 
@@ -307,7 +321,7 @@ input CreateTeacherSharedInput {
   appointmentId: Int!
   groupId: Int!
   studyMaterialId: Int!
-  teacherId: Int!
+  teacherId: Int
 }
 
 input UpdateTeacherSharedInput {

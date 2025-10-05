@@ -1,5 +1,5 @@
 import { InputType, Int, Field } from '@nestjs/graphql';
-import { IsNotEmpty, IsNumber } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 
 @InputType()
 export class CreateTeacherSharedInput {
@@ -18,8 +18,8 @@ export class CreateTeacherSharedInput {
   @Field(() => Int)
   studyMaterialId: number;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsNumber()
-  @Field(() => Int)
+  @Field(() => Int, { nullable: true })
   teacherId: number;
 }

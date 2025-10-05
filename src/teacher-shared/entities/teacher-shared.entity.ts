@@ -16,8 +16,8 @@ export class TeacherShared {
   @Field(() => Int)
   appointmentId: number;
 
-  @Column('bigint')
-  @Field(() => Int)
+  @Column('bigint', { nullable: true })
+  @Field(() => Int, { nullable: true })
   teacherId: number;
 
   @Column('bigint')

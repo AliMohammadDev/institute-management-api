@@ -1,6 +1,6 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { PrimaryGeneratedColumn, Column, BaseEntity, OneToMany, Entity } from 'typeorm';
-import { TimePeriod } from 'src/shared/enums/appointment'; // عدل المسار حسب ملفك
+import { TimePeriod, WeekDay } from 'src/shared/enums/appointment'; // عدل المسار حسب ملفك
 import { TeacherShared } from 'src/teacher-shared/entities/teacher-shared.entity';
 
 @ObjectType()
@@ -21,6 +21,10 @@ export class Appointment extends BaseEntity {
   @Column({ type: 'varchar', length: 255, nullable: true })
   @Field({ nullable: true })
   description?: string;
+
+  @Column({ type: 'enum', enum: WeekDay, default: WeekDay.FRIDAY })
+  @Field(() => WeekDay)
+  day: WeekDay;
 
   @Column({ type: 'enum', enum: TimePeriod, default: TimePeriod.AM })
   @Field(() => TimePeriod)

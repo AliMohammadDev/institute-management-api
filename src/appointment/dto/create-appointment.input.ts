@@ -1,6 +1,6 @@
 import { InputType, Field } from '@nestjs/graphql';
 import { IsString, IsOptional, IsEnum, IsNotEmpty } from 'class-validator';
-import { TimePeriod } from 'src/shared/enums/appointment';
+import { TimePeriod, WeekDay } from 'src/shared/enums/appointment';
 
 @InputType()
 export class CreateAppointmentInput {
@@ -14,13 +14,18 @@ export class CreateAppointmentInput {
   @Field(() => String)
   endTime: string;
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
   @Field(() => String)
   description?: string;
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsEnum(TimePeriod)
   @Field(() => TimePeriod)
   period: TimePeriod;
+
+  @IsNotEmpty()
+  @IsEnum(WeekDay)
+  @Field(() => WeekDay)
+  day: WeekDay;
 }
