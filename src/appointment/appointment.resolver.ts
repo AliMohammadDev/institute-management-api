@@ -5,6 +5,9 @@ import { CreateAppointmentInput } from './dto/create-appointment.input';
 import { UpdateAppointmentInput } from './dto/update-appointment.input';
 import { FindAllAppointmentInput } from './dto/find-all-appointment.input';
 import { AppointmentPaginationResultOutput } from './dto/find-all-appointment.output';
+import { HttpException, HttpStatus } from '@nestjs/common';
+import { ErrorMessages } from 'src/shared/error-messages.object';
+import { timeToSeconds } from 'src/shared/helpers';
 
 @Resolver(() => Appointment)
 export class AppointmentResolver {
@@ -12,6 +15,11 @@ export class AppointmentResolver {
 
   @Mutation(() => Appointment)
   public createAppointment(@Args('createAppointmentInput') createAppointmentInput: CreateAppointmentInput) {
+    const startTime = timeToSeconds(createAppointmentInput.startTime);
+    const endTime = timeToSeconds(createAppointmentInput.endTime);
+    if (startTime > endTime) {
+      throw new HttpException(ErrorMessages.END_TIME_ERROR, HttpStatus.BAD_REQUEST);
+    }
     return this.appointmentService.create(createAppointmentInput);
   }
 

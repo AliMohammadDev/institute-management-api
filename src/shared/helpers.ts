@@ -234,3 +234,8 @@ export function removeFields<T>(obj: T): T {
   }
   return clone;
 }
+
+export function timeToSeconds(time: string) {
+  const [h, m, s] = time.split(':').map(Number);
+  return h * 3600 + m * 60 + (s || 0);
+}
